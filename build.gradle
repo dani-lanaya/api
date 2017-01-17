@@ -32,6 +32,8 @@ repositories {
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter')
 	compile("org.springframework.boot:spring-boot-starter-web")
+    compile('org.springframework.data:spring-data-elasticsearch')
+	compile("com.fasterxml.jackson.module:jackson-module-kotlin:2.8.4")
 	testCompile('org.springframework.boot:spring-boot-starter-test')
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
