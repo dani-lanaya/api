@@ -1,8 +1,8 @@
 package com.jamsession
 
 import com.fasterxml.jackson.module.kotlin.KotlinModule
-import com.jamsession.generator.RandomUser
-import com.jamsession.generator.RandomUserResults
+import com.jamsession.generator.generateUsers
+import com.jamsession.generator.randomUserToMusician
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -11,7 +11,6 @@ import org.springframework.data.elasticsearch.annotations.Document
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.client.RestTemplate
 import java.util.logging.Logger
 
 @SpringBootApplication
@@ -23,11 +22,16 @@ open class ApiApplication {
     open fun kotlinModule() = KotlinModule()
 
     @Bean
-    open fun init(repository: TestRepository) = CommandLineRunner {
-        repository.save(DummyData(1))
-        repository.save(DummyData(2))
-        repository.save(DummyData(3))
-        repository.save(DummyData(4))
+    open fun init(musicianRepository: MusicianRepository) = CommandLineRunner {
+        val start = System.currentTimeMillis()
+        val numRandUsers = 100
+        log.info { "Generating users" }
+        try {
+            musicianRepository.save(generateUsers(numRandUsers).map { randomUserToMusician(it) })
+            log.info { "Generated $numRandUsers musicians in ${System.currentTimeMillis() - start} ms" }
+        } catch(e: Exception) {
+
+        }
     }
 }
 
